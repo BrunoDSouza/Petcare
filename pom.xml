@@ -54,17 +54,17 @@
 			<scope>runtime</scope>
 		</dependency> -->
 
-<!-- 		<dependency>
+ 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
-		</dependency -->
+		</dependency> 
 		
-		<dependency>
+		<!-- <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
-        </dependency>
+        </dependency> -->
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -90,18 +90,18 @@
       		<artifactId>hibernate-entitymanager</artifactId>
     	</dependency> -->
     	
-    	<dependency>
+    	<!-- <dependency>
 	      <groupId>org.flywaydb</groupId>
 	      <artifactId>flyway-core</artifactId>
-	      <version>4.1.2</version><!--$NO-MVN-MAN-VER$-->
-    	</dependency>
+	      <version>4.1.2</version>
+    	</dependency> -->
 		
 		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
   			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
   		</dependency>
 		
-				<dependency>
+		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
 			<scope>runtime</scope>
@@ -114,10 +114,6 @@
 		</dependency>
 
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jersey</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jersey</artifactId>
