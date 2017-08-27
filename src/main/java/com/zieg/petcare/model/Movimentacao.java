@@ -38,7 +38,7 @@ public class Movimentacao {
 	
 	@NotNull
 	@Valid
-	@JoinColumn(name="cod_produto", nullable = false)
+	@JoinColumn(name="cod_produto")
 	@ManyToOne
 	private Produto produto;
 	
