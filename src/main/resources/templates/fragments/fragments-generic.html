@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:data="http://www.thymeleaf.org/extras/data-attribute"
+	layout:decorate="~{layout/layout-padrao}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> 
+
+<body>
+		<div  th:fragment="form-pesquisa">
+			<form class="form-vertical js-form-loading">
+				<div class="form-group">
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<div class="input-group">
+								<input id="search" type="search" class="form-control" 
+								placeholder="Pesquise pelo nome..."/>
+								
+								<span class="input-group-btn">
+									<button class="btn btn-default" type="button">
+										<span class="glyphicon glyphicon-search"></span>
+									</button>
+								</span>	
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>	
+			</form>
+		</div>
+			
+</body>
+</html>

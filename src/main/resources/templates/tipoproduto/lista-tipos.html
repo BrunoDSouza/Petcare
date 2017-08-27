@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:data="http://www.thymeleaf.org/extras/data-attribute"
+	layout:decorate="~{layout/layout-padrao}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body>
+	<section layout:fragment="conteudo">
+		<div class="page-header">
+			<div class="row">
+				<div class="container-fluid">
+					<div class="col-xs-10">
+						<h1>Tipos de Produto</h1>
+					</div>
+				
+					<div class="col-xs-2" sec:authorize="hasRole('ADMIN')">
+						<div class="aw-page-header-controls">
+							<a class="btn btn-primary" type="button"
+							   data-toggle="modal" data-target="#modalTipo"
+							   data:url-edit="@{/ajax/novo/tipo}"> 
+								<i class="fa  fa-plus-circle"></i> <span class="hidden-xs">Adicionar Tipo</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+			
+		<div class="container-fluid">
+		
+			<div th:replace="fragments/alert :: alert">
+				<!-- Div para mensagens -->
+			</div>
+		
+			<form class="container-fluid" th:object="${tipoProduto}">
+			 	<div th:replace="fragments/alert :: alert-error">
+					<!-- Div para errors -->
+				</div>
+			</form>	
+			
+			<div class="row">
+				<div class="col-md-4 col-sm-6" th:each="t : ${tipoProdutos}">
+		        <div class="thumbnail box-thumb box-fix">
+				  <div class="caption text-left">
+			 			<h1 th:text="${t.tipo}"></h1>
+			            <p th:text="${t.descricao}"></p>
+			            <p th:text="'Situação: ' + #{|tipoStatus.${t.status}|}"></p>
+		          </div>  
+		          <div class="caption text-left">
+		          		<a class="btn btn-primary"
+			          	   sec:authorize="hasRole('ADMIN')"
+					  	   data-toggle="modal" data-target="#modalTipo"
+					  	   data:url-edit="@{/ajax/edit/tipo/{codigo}(codigo=${t.codigo})}">
+					  	   Editar
+						</a>	
+		          </div>     
+		        </div>
+				</div>
+			</div>
+			
+				
+		</div>
+		
+		<!-- Inicio do Modal Tipos -->
+		<div class="modal fade" id="modalTipo" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-md" role="document">
+		  		<div class="modal-content">
+		  			<div id="container-tipo">
+		  			<div th:fragment="modalTipo">
+		  					<form method="POST" class="form-vertical js-form-loading" th:object="${tipo}" 
+								  th:action="@{/tipos/novo}">
+				     			<div class="modal-header">
+					       			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					       				<span aria-hidden="true">&times;</span>
+					       			</button>
+					       			<h2 class="modal-title" id="myModalLabel">Adicione um novo Tipo</h2>
+				     			</div>
+				     			<div class="modal-body">		       					
+									<input type="hidden" th:field="*{codigo}"/>
+				
+									<div class="row">
+											<div class="col-sm-12">
+												<div class="form-group">
+													<label for="tipo">Tipo</label>
+													<input id="tipo" type="text" class="form-control"
+													 th:field="*{tipo}" placeholder="Digite um tipo...">
+												</div>
+											</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="form-group">
+												<label for="descricao"> Descrição do tipo</label>
+												<textarea id = "descricao" class="form-control"
+												 th:field="*{descricao}" cols="12" rows="5"
+												 placeholder="Digite uma descrição sobre o tipo...">
+												</textarea>	
+											</div>
+										</div>
+									</div>
+									
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label for="status">Status</label>
+												<select id="status" class="form-control chosen" th:field="*{status}"
+														data-placeholder="Selecione">
+													<option value=""></option>
+													<option th:each="s: ${Status}" th:value="${s}" th:text="#{|tipoStatus.${s}|}"></option>
+												</select>
+											</div>
+										</div>
+									</div>
+									
+									<div class="row">						
+											<div class="col-sm-6">
+												<div class="btn-toolbar" role="toolbar">
+													<button class="btn btn-primary" type="submit">Salvar</button>
+													<a class="btn btn-default" data-dismiss="modal">Cancelar</a>
+												</div>
+											</div>
+									</div>
+				     			</div>
+				     		</form>
+		  			</div>
+		  			</div>
+		  		</div>
+			</div>
+		</div> <!-- Fim do Modal Tipos -->
+		
+		
+	</section>
+	
+	<th:block layout:fragment="javascript-extra">
+		<script th:src="@{/javascripts/utils.js}"></script>
+		
+		<script type="text/javascript">
+			
+				dataTable.create($('.dataTable'));
+			
+				$('#search').on('keyup change', function(){
+					dataTable.search($(this))
+				});
+				
+				$(document).on('show.bs.modal','#modalTipo', function(event){
+					var botao = $(event.relatedTarget);
+					getModal(botao,$('#container-tipo'))
+				});
+				
+				uniformHeight($(".thumbnail"))
+				
+		</script>
+				
+				
+				
+	</th:block>
+</body>
+</html>

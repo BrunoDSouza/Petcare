@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:data="http://www.thymeleaf.org/extras/data-attribute"
+	layout:decorate="~{layout/layout-padrao}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> 
+
+<body>	
+		<div th:fragment="table">
+			
+			<div class="table-responsive">
+				<table id="tableProduto" class="table dataTable table-striped  
+												 table-hover table-condensed  
+												 js-sticky-table ">
+					<thead class="aw-table-header-solid">
+						<tr>
+							<th class="av-table-col-1">Cod</th>
+							<th >Nome</th>
+							<th class="av-table-col-2">Tipo Produto</th>
+							<th class="av-table-col-3" >Fornecedor</th>
+							<th class="av-table-col-2">Medida</th>
+							<th class="av-table-col-2">Valor Compra</th>
+							<th class="av-table-col-2">Valor Venda</th>
+							<th class="av-table-col-2">Qtd Estoque</th>
+							<th class="av-table-col-2">Estoque mínimo</th>
+							<th class="av-table-col-2">Status</th>
+							<th class="av-table-col-2" 
+								sec:authorize="hasRole('ADMIN')">
+								Opções</th> 
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="av-table-col" th:each="p : ${produtos}" 
+							th:classappend="(${p.getQtd_estoque()} <= ${p.getEstoque_min()}) ? 
+																(${p.getQtd_estoque()} < 0 ? 'danger disabled' : 'warning disabled') : ''">
+							
+							<td th:text="${p.codigo}" class="text-center"></td>
+							<td>
+								<a th:href="@{/produto/{codigo}(codigo=${p.codigo})}" th:text="${p.nome}"
+								   sec:authorize="hasRole('ADMIN')"></a>
+								<span th:text="${p.nome}"
+								 sec:authorize="not hasRole('ADMIN')"></span>
+							</td>
+							<td th:text="${p.tipoproduto.tipo}"></td>
+							<td th:text="${p.fornecedor.nome}"></td>
+							<td th:text="#{|tipoMedida.${p.medida}|}" class="text-center"></td>
+							<td th:text="${'R$' + p.vl_compra}"></td>
+							<td th:text="${'R$' + p.vl_venda}"></td>
+							<td th:text="${p.qtd_estoque}"></td>
+							<td th:text="${p.estoque_min}"></td>
+							<td th:text="#{|tipoStatus.${p.status_produto}|}"></td>
+
+							
+							<td class="text-center"
+								sec:authorize="hasRole('ADMIN')"> 
+								<span>&nbsp;</span> 
+								<a id="icon" class="glyphicon glyphicon-edit" 
+								  	 data-tooltip="tooltip" title="Editar"
+								  	 th:href="@{/produto/{codigo}(codigo=${p.codigo})}">
+								  </a>
+							</td>
+						</tr>
+						<tr th:if="${produtos.empty}">
+							<td colspan="12">Nenhum produto cadastrado</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+	
+		
+		</div>
+		
+		<div th:fragment="form-pesquisa">
+			<form class="form-vertical js-form-loading">
+				<div class="form-group">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="form-group">
+							<div class="input-group">
+							<input id="search" type="search" class="form-control" 
+							placeholder="Pesquise pelo nome..."/>
+							
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button">
+									<span class="glyphicon glyphicon-search"></span>
+								</button>
+							</span>	
+							</div>
+						</div>
+					</div>
+				</div>
+					
+				<div class="row">
+										
+					<div class="col-sm-3">
+						<div class="form-group">
+							<label for="fornecedor">Fornecedor</label>
+							<select id="fornecedor" class="form-control chosen"
+									data-placeholder="Selecione um Fornecedor">
+								<option value=""></option>
+								<option th:each="fornecedores : ${Fornecedores}" th:value="${fornecedores.nome}" th:text="${fornecedores.nome}"></option>
+							</select>
+						</div>
+					</div>					
+					
+					<div class="col-sm-3">
+						<div class="form-group">
+							<label for="tipo">Tipo</label>
+							<select id="tipo" class="form-control chosen"
+									data-placeholder="Selecione um tipo">
+								<option value=""></option>
+								<option th:each="tipos : ${tipoProduto}" th:value="${tipos.tipo}" th:text="${tipos.tipo}"></option>
+							</select>
+						</div>
+					</div>
+					
+					<div class="col-sm-3">
+						<div class="form-group">
+							<label for="medida">Medida</label>
+							<select id="medida" class="form-control chosen"
+									data-placeholder="Selecione uma Medida">
+								<option value=""></option>
+								<option th:each="medidas : ${medida}" th:value="${medidas}" th:text="#{|tipoMedida.${medidas}|}"></option>
+							</select>
+						</div>
+					</div>
+				</div>
+				</div>	
+			</form>
+		</div>
+			
+</body>
+</html>

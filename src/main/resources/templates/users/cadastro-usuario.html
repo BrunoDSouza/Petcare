@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout-padrao}">
+<head>
+	<link rel="stylesheet" type="text/css" th:href="@{/layout/vendors/dataPicker/bootstrap-datepicker.min.css}"/>
+</head>
+
+<body>
+	<section layout:fragment="conteudo">
+		<div class="page-header">
+			<div class="container-fluid">
+				<h1 th:if="${usuario.codigo != null}">
+					Atualizar Dados
+				</h1>
+				
+				<h1 th:if="${usuario.codigo == null}">
+					Cadastre um novo Usuário
+				</h1>
+			</div>
+		</div>
+		
+		<div class="container-fluid">
+		
+			<form method="POST" class="form-vertical js-form-loading" th:object="${usuario}" 
+			 th:action="@{/users/novo}">
+				
+				
+				<div th:replace="fragments/alert :: alert-error">
+					<!-- Div para errors -->
+				</div> 
+				
+				<input type="hidden" th:field="*{codigo}"/>
+				<input type="hidden" th:field="*{senha}"
+					   th:if="${usuario.codigo != null}"/>
+				
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group" th:classappend="${#fields.hasErrors('username')} ? has-error">
+							<label for="username">Nome do usuário</label>
+							<input id="username" type="text" class="form-control"
+							 th:field="*{username}" placeholder="Digite um nome...">
+						</div>
+					</div>
+					
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group" th:classappend="${#fields.hasErrors('email')} ? has-error">
+							<label for="email">E-mail</label>
+							<div class="input-group">
+					          <input id="email" type="text" class="form-control" 
+								 th:field="*{email}" placeholder="Digite um email...">
+					          <div class="input-group-btn">
+								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+								<span class="glyphicon glyphicon-envelope"></span>
+								</button>
+					          </div>				          
+	
+					        </div>
+						</div>
+					</div>
+				</div>
+				<div class="row" th:unless="${usuario.codigo != null}">
+					<div class="col-sm-3">
+						<div class="form-group" th:classappend="${#fields.hasErrors('senha')} ? has-error">
+							<label for="senha">Senha</label>
+							<input id="senha" type="password" class="form-control" required="required"
+							 th:field="*{senha}" placeholder="Digite sua senha..." 
+							 oninvalid="this.setCustomValidity('Por favor digite sua senha!')" 
+							 oninput="setCustomValidity('')">
+						</div>
+					</div>
+					
+					
+					<div class="col-sm-3">
+						<div class="form-group">
+							<label for="senhacomp">Confirme a Senha</label>
+							<input id="senhacomp" type="password" required="required" class="form-control"
+							 placeholder="Digite sua senha novamente..." onblur="check(this)">
+						</div>
+					</div>
+
+				</div>
+				
+				<div class="row">
+					<div class='col-sm-3'>
+						<span class="error"></span><br/>
+						<div class="row">
+							<div class="col-sm-12">
+								<label for="dtNascimento">Data Nascimento</label>
+							</div>
+						</div>
+			            <div class="row">
+			            	<div class="col-sm-12">
+			            		<div class="form-group" th:classappend="${#fields.hasErrors('dtNascimento')} ? has-error">
+									<div class="input-group data-field">
+							           <input type='text' class="form-control datapicker" id="dtNascimento" maxlength="10"
+									 			th:field="*{dtNascimento}" placeholder="dd/mm/yyyy">
+									   <div class="input-group-btn">					         
+											<button type="button" class="btn btn-default">
+												<span class="glyphicon glyphicon-calendar"></span>
+											</button>
+							           </div>
+							        </div>
+					            </div>	
+			            	</div>
+			            </div>
+			        </div>
+			        <div class="col-sm-3">
+			        	<div class="row">
+			        		<span class="error"></span><br/>
+			        		<div class="col-sm-12">
+								<label for="roles">Grupo de acesso</label>
+							</div>
+			        	</div>
+			        	<div class="row">
+			        		<div class="col-sm-12">
+								<div class="form-group" th:classappend="${#fields.hasErrors('roles')} ? has-error">
+									<select id="roles" class="field form-control chosen-roles" multiple="true"
+											th:field="*{roles}"
+											data-placeholder="Selecione o grupo">
+										<option value=""></option>									
+										<option th:each="role : ${roles}" th:value="${{role}}" 
+												th:text="#{|tipoRole.${role.descricao}|}"></option>
+									</select>
+								</div>	
+							</div>
+			        	</div>
+			        </div>
+				</div>
+				<br/>
+				<div class="row">
+					<div class="col-sm-3" th:if="${usuario.codigo != null}">
+						<div class="form-group" th:classappend="${#fields.hasErrors('status')} ? has-error">
+							<label for="status">Status Usuário</label>
+							<select id="status" class="field form-control chosen" 
+									th:field="*{status}"
+									data-placeholder="Selecione o status">
+								<option value=""></option>									
+								<option th:each="status : ${Status}" th:value="${status}" 
+										th:text="#{|tipoStatus.${status}|}"></option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<br/>
+				<div class="row">						
+						<div class="col-sm-3">
+							<div class="btn-toolbar" role="toolbar">
+								<button class="btn btn-primary" type="submit">Salvar</button>
+								<a th:href="@{/users}" class="btn btn-default">Cancelar</a>
+							</div>
+						</div>
+				</div>
+			</form>
+		</div>
+	</section>
+	
+	
+		<th:block layout:fragment="javascript-extra">
+			
+			<script th:src="@{/javascripts/venders/bootstrap-datepicker.min.js}"></script>
+			<script th:src="@{/javascripts/venders/bootstrap-datepicker.pt-BR.min.js}"></script>
+			<script th:src="@{/javascripts/venders/jquery.mask.min.js}"></script>
+			<script th:src="@{/javascripts/utils.js}"></script>
+			
+			<script type="text/javascript">
+				
+				$(function () {
+	                $('.datapicker').datepicker({
+	        			format: 'dd/mm/yyyy',
+	        			todayHighlight: true,
+	        			clearBtn: true,
+	        			autoclose: true,
+	        			forceParse: false,
+	        			orientation: "auto right",
+	        		    language: "pt-BR"
+	        		})
+	        		
+	        		$('.datapicker').mask('00/00/0000');
+	        		
+	            });
+				
+				
+				$('.chosen-roles').chosen({
+					no_results_text: "Nenhum item encontrado!",
+					width: '100%'
+				 });
+				
+				$('.datapicker').on('keypress', function(event){
+					
+					if(event.which >= 48 && event.which <= 57)
+							return true
+					
+					return false
+					
+				})
+				
+				$('.datapicker').on('blur', function(){
+					validateData($(this))
+				})
+				
+				
+ 				function check(input) {
+			        if (input.value != document.getElementById('senha').value) {
+			            input.setCustomValidity('As senhas devem ser compativeis!');
+			            input.parentElement.classList.add('has-error')
+			        } else {
+			            input.setCustomValidity('');
+			            input.parentElement.classList.remove('has-error')
+			        }
+			    } 
+				
+				
+				
+			</script>		
+						
+	</th:block>
+	
+</body>
+</html>

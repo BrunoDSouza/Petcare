@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:data="http://www.thymeleaf.org/extras/data-attribute"
+	layout:decorate="~{layout/layout-padrao}">
+	<!-- xmlns:sec="http://www.thymeleaf.org/extras/spring-security" -->
+
+<body>
+	<section layout:fragment="conteudo">
+		<div class="page-header">
+			<div class="row">
+				<div class="container-fluid">
+					<div class="col-xs-10">
+						<h1>Registros de movimentações</h1>
+					</div>
+				
+					<div class="col-xs-2">
+						<div class="aw-page-header-controls">
+							<a class="btn btn-primary" th:href="@{/movimentacao/novo}">
+								<i class="fa  fa-plus-circle"></i> <span class="hidden-xs">Nova Movimentação</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="container-fluid">
+			<div th:replace="fragments/alert :: alert">
+				<!-- Mensagem de alert -->
+			</div>
+		
+			<form id="form-search" class="form-vertical js-form-loading">
+				<div class="form-group">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="form-group">
+							<div class="input-group">
+							<input id="search" type="search" class="form-control" 
+							placeholder="Pesquise pelos dados presente na tabela..."/>
+							
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button">
+									<span class="glyphicon glyphicon-search"></span>
+								</button>
+							</span>	
+							</div>
+						</div>
+					</div>
+				</div>
+					
+				<div class="row">
+					<div class="col-sm-3">
+						<div class="form-group">
+							<label for="produto">Produto</label>
+							<select id="produto" class="form-control chosen"
+									data-placeholder="Selecione um produto">
+								<option value=""></option>
+								<option th:each="p : ${produtos}" th:value="${p.nome}" 
+										th:text="${p.nome}"></option>
+							</select>
+						</div>
+					</div>
+					
+					<div class="col-sm-3">
+						<div class="form-group">
+							<label for="tipomovimento">Tipo</label>
+							<select id="tipomovimento" class="form-control chosen"
+									data-placeholder="Selecione um tipo">
+								<option value=""></option>
+								<option th:each="tipo : ${tipoMovimento}" th:value="${tipo}" 
+										th:text="#{|tipoMovimento.${tipo}|}"></option>
+							</select>
+						</div>
+					</div>
+					
+					<div class="col-sm-3">
+						<div class="form-group">
+							<label for="setor">Setor</label>
+							<select id="setor" class="form-control chosen"
+									data-placeholder="Selecione um setor">
+								<option value=""></option>
+								<option th:each="s : ${setores}" th:value="${s.descricao}" 
+										th:text="${s.descricao}"></option>
+								
+							</select>
+						</div>
+					</div>
+					
+					<div class="col-sm-3">
+						<div class="form-group">
+							<label for="setor">Usuário</label>
+							<select id="usuario" class="form-control chosen"
+									data-placeholder="Selecione um usuário">
+								<option value=""></option>
+								<option th:each="user : ${usuario}" th:value="${user.username}" 
+										th:text="${user.username}"></option>
+								
+							</select>
+						</div>
+					</div>
+				</div>
+				</div>	
+			</form>		
+					
+			<div class="table-responsive">
+				
+				<table class="table dataTable table-striped  
+							  table-hover table-condensed  
+							  js-sticky-table ">
+					<thead class="aw-table-header-solid">
+						<tr>
+							<th class="av-table-col-codigo">Cod</th>
+							<th >Produto</th>
+							<th class="av-table-col-tipo">Tipo Movimentação</th>
+							<th class="av-table-col-tipo" >Setor</th>
+							<th class="av-table-col-tipo">Quantidade</th>
+							<th class="av-table-col-tipo">Valor Unitário</th>
+							<th class="av-table-col-icons">Data Movimentação</th>
+							<th class="av-table-col-valor">Usuário</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="av-table-col" th:each="m : ${movimentacoes} ">
+							<td th:text="${m.codigo}" class="text-center"></td>
+							<td th:text="${m.produto.getNome()}"></td>
+							<td th:text="#{|tipoMovimento.${m.tipoMovimentacao}|}"></td>
+							<td th:text="${m.setor.getDescricao()}"></td>
+							<td th:text="${m.qtd_produto}"></td>
+							<td th:text="${'R$' + m.vl_unitario}"></td>
+							<td th:text="${#dates.format(m.dtMovimentacao, 'dd/MM/yyyy')}"></td>
+							<td th:text="${m.usuario}"></td>
+						</tr>
+						<tr th:if="${movimentacoes.empty}">
+							<td colspan="12">Nenhuma movimentação inserida!</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+	</section>
+	
+	<th:block layout:fragment="javascript-extra">
+		
+		<script type="text/javascript">
+		
+		
+			var table = dataTable.create($('.dataTable'));
+			
+			$('#search').on('keyup change', function(){
+				dataTable.search($(this))
+			});
+			
+			$('#produto').on('change', function(){
+				dataTable.change($(this),1)
+			});
+			
+			$('#tipomovimento').on('change', function(){
+				dataTable.change($(this),2)
+			});
+			
+			$('#setor').on('change', function(){
+				dataTable.change($(this),3)
+			});
+			
+			$('#usuario').on('change', function(){
+				dataTable.change($(this),7)
+			});
+			
+			
+			//Alterando a ordenação padrão da DataTable
+			table.order( [ 6, 'desc' ] )
+						   .draw();
+			
+			
+		</script>
+				
+	</th:block>
+</body>
+</html>

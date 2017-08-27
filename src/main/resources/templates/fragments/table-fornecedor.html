@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:data="http://www.thymeleaf.org/extras/data-attribute"
+	layout:decorate="~{layout/layout-padrao}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> 
+
+<body>	
+		<div th:fragment="table">
+			
+			<div class="table-responsive">
+				<table id="tabela-fornecedor" class="table dataTable table-striped table-hover js-sticky-table">
+					<thead class="aw-table-header-solid">
+						<tr>
+							<th class="av-table-col-1">Código</th>
+							<th>Nome</th>
+							<th class="av-table-col-3" colspan="1">CNPJ</th>
+							<th class="av-table-col-3">Status</th>
+							<th class="av-table-col-1"  
+								sec:authorize="hasRole('ADMIN')">
+								Opções</th> 
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="fornecedor : ${fornecedores}">
+							<td th:text="${fornecedor.codigo}" class="text-center"></td>
+							<td>
+								<a th:href="@{/fornecedor/{codigo}(codigo=${fornecedor.codigo})}" th:text="${fornecedor.nome}" 
+								   sec:authorize="hasRole('ADMIN')"></a>
+								<span th:text="${fornecedor.nome}"
+								 sec:authorize="not hasRole('ADMIN')"></span>
+							</td>
+							<td th:text="${fornecedor.cnpj}"></td>
+							<td th:text="#{|tipoStatus.${fornecedor.cod_status}|}"
+								class="text-center cnpj"></td>
+							<td class="text-center" colspan="2"
+								sec:authorize="hasRole('ADMIN')">
+								<span>&nbsp;&nbsp;</span>
+								<a id="icon" class="glyphicon glyphicon-edit" 
+								  	 data-tooltip="tooltip" title="Editar"
+								  	 th:href="@{/fornecedor/{codigo}(codigo=${fornecedor.codigo})}">
+								</a>
+							</td>
+						</tr>
+						<tr th:if="${fornecedores.empty}">
+							<td colspan="5">Nenhum forncedor cadastrado</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		
+		</div>
+		
+		<div class="container-fluid" th:fragment="form-pesquisa">
+			<form class="form-vertical js-form-loading">
+				<div class="form-group">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="form-group">
+							<div class="input-group">
+							<input id="search" type="search" class="form-control" 
+							placeholder="Pesquise pelo nome..."/>
+							
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button">
+									<span class="glyphicon glyphicon-search"></span>
+								</button>
+							</span>	
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>	
+			</form>
+		</div>
+			
+</body>
+</html>

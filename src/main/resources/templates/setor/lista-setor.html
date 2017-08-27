@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:data="http://www.thymeleaf.org/extras/data-attribute"
+	layout:decorate="~{layout/layout-padrao}"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> 
+
+<body>
+	<section layout:fragment="conteudo">
+		<div class="page-header">
+			<div class="row">
+				<div class="container-fluid">
+					<div class="col-xs-10">
+						<h1>Lista de Setores</h1>
+					</div>
+				
+					<div class="col-xs-2" sec:authorize="hasRole('ADMIN')">
+						<div class="aw-page-header-controls">
+							<a class="btn btn-primary" type="button"
+							   data-toggle="modal" data-target="#modalSetor"
+							   data:url-edit="@{/ajax/novo/setor}"> 
+								<i class="fa  fa-plus-circle"></i> <span class="hidden-xs">Novo Setor</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="container-fluid">
+		
+			<div th:replace="fragments/alert :: alert">
+				<!-- Div para mensagens -->
+			</div>
+		
+			<form class="container-fluid" th:object="${setor}">
+			 	<div th:replace="fragments/alert :: alert-error">
+					<!-- Div para errors -->
+				</div>
+			</form>			 
+
+			<div th:replace="fragments/fragments-generic :: form-pesquisa">
+				<!-- Form de pesquisa -->
+			</div>
+			
+			<div class="table-responsive">
+				<table id="tabela-produtos" class="table dataTable table-striped table-hover table-condensed  js-sticky-table">
+					<thead class="aw-table-header-solid">
+						<tr>
+							<th class="av-table-col-1">Código</th>
+							<th class="av-table-col-2" >Setor</th>
+							<th class="av-table-col-2" >Status</th>
+							<th class="av-table-col-icons"
+								sec:authorize="hasRole('ADMIN')">
+								Opções</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="s : ${setores}">
+							<td th:text="${s.idSetor}" class="text-center"></td>
+							<td>
+								<a th:href="@{/setor/{codigo}(codigo=${s.idSetor})}" th:text="${s.descricao}"></a> 
+							</td>
+							<td th:text="#{|tipoStatus.${s.status}|}"></td>
+							<td class="text-center" sec:authorize="hasRole('ADMIN')">
+								<a id="icon" class="glyphicon glyphicon-edit click" 
+								  	 data-tooltip="tooltip" title="Editar"
+								  	 data-toggle="modal" data-target="#modalSetor"
+								  	 data:url-edit="@{/ajax/edit/setor/{codigo}(codigo=${s.idSetor})}">
+								</a>
+							</td>
+						</tr>
+						<tr th:if="${setores.empty}">
+							<td colspan="5">Nenhum Setor cadastrado</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+		</div>
+		
+		<div class="modal fade" id="modalSetor" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-sm" role="document">
+		  		<div class="modal-content">
+		  			<div id="container-setor">
+		  			<div th:fragment="modalSetor">
+		  					<form method="POST" class="form-vertical js-form-loading" th:object="${setor}" 
+								  th:action="@{/setor/novo}">
+				     			<div class="modal-header">
+					       			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					       				<span aria-hidden="true">&times;</span>
+					       			</button>
+					       			<h2 class="modal-title" id="myModalLabel">Adicione um novo Setor</h2>
+				     			</div>
+				     			<div class="modal-body">		       					
+									<input type="hidden" th:field="*{idSetor}"/>
+									
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="form-group">
+												<label for="descricao">Nome</label>
+												<input id="descricao" type="text" class="form-control" 
+												th:field="*{descricao}" placeholder="Digite aqui..."/>
+											</div>
+										</div>
+									</div>
+									
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="form-group">
+												<label for="status">Status do Setor</label>
+												<select id="status" class="form-control chosen" th:field="*{status}"
+														data-placeholder="Selecione">
+													<option value=""></option>
+													<option th:each="s: ${Status}" th:value="${s}" th:text="#{|tipoStatus.${s}|}"></option>
+												</select>
+											</div>
+										</div>
+									</div>
+									
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="form-group">
+												<button class="btn btn-primary" type="submit">Salvar</button>
+												<a th:href="@{/setor}" class="btn btn-default" data-dismiss="modal">Cancelar</a>
+											</div>
+										</div>
+									</div>
+				     			</div>
+				     		</form>
+		  			</div>
+		  			</div>
+		  		</div>
+			</div>
+		</div>
+		
+	</section>
+	
+	<th:block layout:fragment="javascript-extra">
+		<script th:src="@{/javascripts/utils.js}"></script>
+		
+		<script type="text/javascript">
+			
+			dataTable.create($('.dataTable'));
+			
+			$('#search').on('keyup change', function(){
+				dataTable.search($(this))
+			});
+			
+			$(document).on('show.bs.modal','#modalSetor', function(event){
+				var botao = $(event.relatedTarget);
+				getModal(botao,$('#container-setor'))
+			});
+		
+		</script>
+				
+	</th:block>
+</body>
+</html>

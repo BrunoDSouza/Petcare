@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:data="http://www.thymeleaf.org/extras/data-attribute"
+	layout:decorate="~{layout/layout-padrao}">
+
+<body>	
+		<div th:fragment="alert">
+			<div class=" alert  alert-success alert-blur" role="alert" th:if="${!#strings.isEmpty(mensagem)}">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<span th:text="${mensagem}"></span>
+			</div> 
+		</div>
+		
+		<div class="alert alert-danger  alert-dismissible alertt-blur-error" role="alert" th:if="${#fields.hasAnyErrors()}" 
+		     th:fragment="alert-error">
+			
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<th:block th:each="error : ${#fields.detailedErrors()}">
+				<div>
+					<i class="fa fa-exclamation-circle"></i>
+					<span th:text="${error.message}"></span>
+				</div>  
+			</th:block>
+		</div>
+</body>
+</html>

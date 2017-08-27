@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:data="http://www.thymeleaf.org/extras/data-attribute"
+	layout:decorate="~{layout/layout-padrao}">
+
+<head>
+</head>
+	
+<body>
+	<section layout:fragment="conteudo">
+		<div class="page-header">
+			<div class="container-fluid">
+				<h1>
+					Movimentações de Estoque
+				</h1>
+			</div>
+		</div>
+		
+		<div class="container-fluid">
+					
+			<div class="alert  alert-danger alertt-blur-error" role="alert" th:if="${!#strings.isEmpty(error)}">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<i class="fa fa-exclamation-circle"></i>
+				<span th:text="${error}"></span> 
+			</div>
+			
+		
+			<form id="form-items" method="POST" class="form-vertical js-form-loading" th:object="${items}" 
+			 th:action="@{/movimentacao/novo}">
+				
+				<div class="row">
+						<div class="col-sm-6">
+							<span class="error tipo"></span><br/>
+							<div class="form-group">
+								<label for="tipo">Tipo de Movimentação</label>
+								<select id="tipo" class="chosen form-control field"
+										data-placeholder="Selecione um tipo">
+									<option value=""></option>
+									<option th:each="tipo : ${tipoMovimento}" th:value="${tipo}" 
+											th:text="#{|tipoMovimento.${tipo}|}"></option>
+								</select>
+							</div>
+						</div>
+						
+						<div class="col-sm-6">
+							<div class="row">
+								<div class="col-sm-12">
+									<span class="error setor"></span><br/>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="setor">Setor</label>
+										<select id="setor" class="chosen form-control field"
+												data-placeholder="Selecione um setor">
+											<option value=""></option>
+											<option th:each="s : ${setores}" th:value="${{s}}" 
+													th:text="${s.descricao}"></option>
+										</select>
+									</div>
+								</div>
+							</div>
+								
+						</div>
+						
+						
+						
+						
+				</div>
+								
+				<div class="row">
+					<div class="col-sm-6">
+						<span class="error produto"></span><br/>
+						<div class="row">
+							<div class="col-sm-12">
+								<label for="produto">Produto</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-9 padding-right">
+								<div class="form-group">	
+										<select id="produto" th:fragment="addProduto(produto)"
+											    class="chosen form-control field"
+											    data-placeholder="Adicione um produto...." >
+											<option value=""></option>											    
+											<option th:each="p : ${produto}" th:value="${{p}}" 
+													th:text="${p.nome}"></option>
+										</select>
+																	
+								</div>
+							</div>
+							<div class="col-sm-2 padding-left">
+								<div class="form-group">
+									<button class="btn btn-info" type="button"
+										data-toggle="modal" data-target="#modalProduto"> 
+										Adicionar
+										<i class="fa fa-plus-circle" aria-hidden="true"></i>
+									</button>
+								</div>
+							</div>
+						</div>				
+					</div>
+					
+					<div class="col-sm-6">
+						<span class="error quantidade"></span><br/>
+						<div class="row">
+							<div class="col-sm-12">
+								<label for="saldo">Quantidade</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<input id="saldo" type="number" class="form-control only-number field"
+										   placeholder="Digite um valor"/>
+								</div>
+							</div>
+						</div>						
+
+					</div>
+					
+				</div>
+																						
+				<div class="form-group">
+					<button class="btn btn-success addItem" type="button">Incluir Item</button>	
+					<span class="error addItem"></span>
+				</div>
+				<br/><br/>
+				
+				<input id="item" type="hidden" th:field="*{valor}"/>
+			
+				<!-- Tabela de items adicionados -->
+				<div id="tableItens">
+				    <div th:fragment="itensAdicionados(valor)">
+				      	<div class="table-responsive">
+							<table class="table table-hover  table-condensed  js-sticky-table">
+							<thead class="aw-table-header-solid">
+								<tr>
+									<th>Tipo Movimentação</th>
+									<th>Setor</th>
+									<th>Produto</th>
+									<th>Quantidade</th>
+									<th>Valor</th>
+									<th>SubTotal</th>
+									<th class="av-table-col-icons"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="av-table-col" th:each="l : ${itemsList} ">
+									<td th:text="${l.tipoMovimentacao}"></td>
+									<td th:text="${l.setor.descricao}"></td>
+									<td th:text="${l.produto.nome}" class="text-center"></td>
+									<td th:text="${l.qtd_produto}"></td>
+									<td th:text="'R$' + ${#numbers.formatDecimal(l.vl_unitario,0,'POINT',2,'COMMA')}"></td>
+									<td th:text="'R$' + ${#numbers.formatDecimal((l.vl_unitario * l.qtd_produto),0,'POINT',2,'COMMA')}"></td>
+									<td class="text-center">
+										<button class="btn btn-danger btn-xs center-block removeItem" type="button">
+												Remover
+										</button>
+									</td>
+								
+								</tr>
+								<tr th:if="(${itemsList == null} or ${itemsList.size() == 0})">
+									<td colspan="12">Nenhum item adicionado</td>
+								</tr>
+							</tbody>
+							</table>
+						</div>
+						
+						<div class="text-right">
+							<span th:if="(${total != null} and ${total != 0.0})" class="span-md" 
+								  th:text="'Total: R$' + ${#numbers.formatDecimal(total,0,'POINT',2,'COMMA')}"></span>
+						</div>	
+						<br/>
+						
+						<div class="btn-toolbar" role="toolbar" style="float: right;">
+					        	<button type="submit" class="btn btn-primary finish">Finalizar</button>
+					        	<a th:href="@{/movimentacao}" class="btn btn-default">Cancelar</a>
+					    </div>
+				    </div>
+				</div> <!-- Fim de items adicionados -->
+				
+			</form>				
+			
+		</div>
+			
+		<!-- Modal Adicionar Produto -->
+		<div class="modal fade" id="modalProduto" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-lg" role="document">
+		  		<div class="modal-content">
+		  			<form>
+		     			<div class="modal-header">
+			       			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			       				<span aria-hidden="true">&times;</span>
+			       			</button>
+			       			<h4 class="modal-title" id="myModalLabel">Selecione um produto</h4>
+		     			</div>
+		     			<div class="modal-body">		       					
+						
+						<div th:replace="fragments/table-produto :: form-pesquisa">
+						</div>									
+      					
+		       			<div id="ProdutosList">
+		       				<div th:fragment="ListProdutos">
+		       					<div class="table-responsive">
+									<table class="table dataTable table-striped  table-bordered  table-hover  table-condensed  js-sticky-table">
+										<thead class="aw-table-header-solid">
+											<tr>
+												<th >Nome</th>
+												<th class="av-table-col-2">Tipo Produto</th>
+												<th class="av-table-col-2" >Fornecedor</th>
+												<th class="av-table-col-2">Medida</th>
+												<th class="av-table-col-2">Valor Compra</th>
+												<th class="av-table-col-2">Valor Venda</th>
+												<th class="av-table-col-2">Saldo Estoque</th>
+												<th class="av-table-col-2">Estoque Minimo</th>
+												<th class="av-table-col-2">Status</th>
+												<th class="av-table-col-1"></th>
+												<!-- sec:authorize="hasRole('ROLE_CADASTRAR_VINHO')"></th> --> 
+											</tr>
+										</thead>
+										<tbody>
+											<tr class="av-table-col" th:each="p : ${produtos}"
+												th:classappend="(${p.getQtd_estoque()} <= ${p.getEstoque_min()}) ? 
+																(${p.getQtd_estoque()} < 0 ? 'danger disabled' : 'warning disabled') : ''">
+												<td	th:text="${p.nome}"> </td>
+												<td th:text="${p.tipoproduto.tipo}"></td>
+												<td th:text="${p.fornecedor.nome}"></td>
+												<td th:text="#{|tipoMedida.${p.medida}|}" class="text-center"></td>
+												<td th:text="${p.vl_compra}"></td>
+												<td th:text="${p.vl_venda}"></td>
+												<td th:text="${p.qtd_estoque}"></td>
+												<td th:text="${p.estoque_min}"></td>
+												<td th:text="#{|tipoStatus.${p.status_produto}|}"></td>
+												<th class="av-table-col-icons">
+													<button class="btn btn-info center-block addProduto"
+															data-dismiss="modal" type="button"
+															th:href="@{/ajax/addProduto/{codigo}(codigo=${p.codigo})}"
+															th:if="(${p.getStatus()})">
+													Adicionar
+													</button>
+												</th>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+		       				</div>
+		       			</div>							
+		     			</div>
+		     		</form>
+		  		</div>
+			</div>
+		</div> <!-- Fim Modal Adicionar Produto -->
+		
+	</section>
+	
+	<th:block layout:fragment="javascript-extra">
+	<script th:src="@{/javascripts/venders/jquery.dataTables.min.js}"></script>
+	<script th:src="@{/javascripts/pesquisa-table.js}"></script>
+	<script th:src="@{/javascripts/produto-modal.js}"></script>
+	<script th:src="@{/javascripts/itens.js}"></script>
+		
+		<script type="text/javascript">
+	
+			$(document).on('click','.addProduto', function() {
+				adicionaProduto($(this));
+			});	
+			
+			$(document).on('show.bs.modal','#modalProduto', function(){
+				findAllProdutosModal($('#ProdutosList'));	
+			});
+
+			$(document).on('click','.removeItem', function(){
+				item.remove($('#item'),$('#tableItens'),$('.removeItem').index(this));				
+			});
+				
+			$('.addItem').on('click', function(e){
+					item.add($('#tableItens'),$('#item'));
+			});
+			
+			
+			$(document).on('keyup change', '#search', function(){
+				dataTable.search($(this))
+			});
+			
+			$(document).on('change', '#tipo', function(){
+				dataTable.change($(this),1)
+			});
+			
+			$(document).on('change', '#fornecedor', function(){
+				dataTable.change($(this),2)
+			});
+			
+			$(document).on('change', '#medida', function(){
+				dataTable.change($(this),3)
+			});
+			
+			$(document).ready(item.reset());
+
+			$(document).on('submit', function(){
+					item.submitForm = true
+				
+			});
+
+			
+			$('#saldo').on('keypress', function(event){
+				
+				if(event.which >= 48 && event.which <= 57)
+						return true
+				
+				return false
+				
+			})
+			 
+			window.onbeforeunload = function(e) {
+				if((item.array.length > 0 && !item.submitForm) || item.verifyFields($('.field')) ){
+					e.stopPropagation();
+					e.preventDefault();
+					return "Existem dados ainda não enviados! Deseja realmente sair da pagina?"
+				}
+			 };
+			
+		</script>		
+						
+	</th:block>
+
+</body>
+</html>

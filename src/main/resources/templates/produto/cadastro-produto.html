@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout-padrao}">
+<body>
+	<section layout:fragment="conteudo">
+		<div class="page-header">
+			<div class="container-fluid">
+				<h1>
+					Cadastre um novo Produto
+				</h1>
+			</div>
+		</div>
+		
+		<div class="container-fluid">
+			<form method="POST" class="form-vertical js-form-loading" th:object="${produto}" 
+			 th:action="@{/produto/novo}">
+				
+				<div th:replace="fragments/alert :: alert-error">
+					<!-- Div para errors -->
+				</div>
+				
+				<input type="hidden" th:field="*{codigo}"/>
+				
+				<div class="row">
+						<div class="col-sm-10">
+							<div class="form-group" th:classappend="${#fields.hasErrors('nome')} ? has-error">
+								<label for="nome">Nome</label>
+								<input id="nome" type="text" class="field form-control" th:field="*{nome}" placeholder="Digite aqui..."/>
+							</div>
+						</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-sm-5">
+						<div class="form-group" th:classappend="${#fields.hasErrors('vl_compra')} ? has-error">
+							<label for="vlcompra">Valor de Compra</label>
+							<input id="vlcompra" type="text" class="field form-control js-money" th:field="*{vl_compra}"
+								   placeholder="R$"/>
+						</div>					
+					</div>
+					<div class="col-sm-5">
+						<div class="form-group" th:classappend="${#fields.hasErrors('vl_venda')} ? has-error">
+							<label for="vlvenda">Valor de Venda</label>
+							<input id="vlvenda" type="text" class="field form-control js-money" th:field="*{vl_venda}"
+								   placeholder="R$"/>
+						</div>					
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-sm-5">
+						<div class="form-group" th:classappend="${#fields.hasErrors('tipoproduto')} ? has-error">
+							<label for="tipo">Tipo Produto</label>
+							<select id="tipo" class="field form-control chosen" 
+									th:field="*{tipoproduto}"
+									data-placeholder="Selecione um tipo">
+								<option value=""></option>									
+								<option th:each="tipos : ${tipoProduto}" th:value="${{tipos}}" th:text="${tipos.tipo}"></option>
+							</select>
+						</div>
+					</div>
+					
+					<div class="col-sm-5">
+							<div class="form-group" th:classappend="${#fields.hasErrors('fornecedor')} ? has-error">
+								<label for="idfornecedor">Fornecedor</label>
+								<select id="idfornecedor" class="field form-control chosen" 
+										th:field="*{fornecedor}" 
+										data-placeholder="Selecione um fornecedor">
+									<option value=""></option>
+									<option th:each="fornecedores : ${Fornecedores}" th:value="${{fornecedores}}" 
+											th:text="${fornecedores.nome}"></option>
+								</select>
+							</div>
+					</div>			
+					
+				</div>
+				
+				<div class="row">
+					
+					<div class="col-sm-5">
+						<div class="form-group" th:classappend="${#fields.hasErrors('medida')} ? has-error">
+							<label for="medida">Medida</label>
+							<select id="medida" class="field form-control chosen" th:field="*{medida}"
+									data-placeholder="Selecione uma medida">
+								<option value=""></option>
+								<option th:each="medidas : ${medida}" th:value="${medidas}" th:text="#{|tipoMedida.${medidas}|}"></option>
+							</select>
+						</div>
+					</div>
+				
+					<div class="col-sm-5" th:if="${produto.codigo != null}">
+						<div class="form-group" th:classappend="${#fields.hasErrors('status_produto')} ? has-error">
+							<label for="status">Status Produto</label>
+							<select id="status" class="field form-control chosen" 
+									th:field="*{status_produto}"
+									data-placeholder="Selecione o status">
+								<option value=""></option>									
+								<option th:each="status : ${Status}" th:value="${status}" 
+										th:text="#{|tipoStatus.${status}|}"></option>
+							</select>
+						</div>
+					</div>
+				</div>
+														
+				<div class="form-group">
+					<button class="btn  btn-primary" type="submit">Salvar</button>
+					<a th:href="@{/produto}" class="btn btn-default">Cancelar</a>
+				</div>
+		
+			</form>
+		</div>
+	</section>
+	
+	
+	<th:block layout:fragment="javascript-extra">
+
+		<script th:src="@{/javascripts/itens.js}"></script>
+		
+		<script type="text/javascript">
+					
+			$(document).on('submit', function(){
+				item.submitForm = true
+		
+			});
+		
+		
+			window.onbeforeunload = function(e) {
+				if(item.verifyFields($('.field')) && !item.submitForm){
+					e.preventDefault();
+					return "Existem dados ainda não enviados! Deseja realmente sair da pagina?"
+				}
+			 };
+
+		
+		</script>		
+						
+	</th:block>
+	
+</body>
+</html>

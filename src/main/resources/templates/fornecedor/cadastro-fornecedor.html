@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout-padrao}">
+<body>
+	<section layout:fragment="conteudo">
+		<div class="page-header">
+			<div class="container-fluid">
+				<h1>
+					Cadastre um novo Fornecedor
+				</h1>
+			</div>
+		</div>
+		
+		<div class="container-fluid">
+			<form method="POST" class="form-vertical js-form-loading" th:object="${fornecedor}" 
+			 th:action="@{/fornecedor/novo}">
+				
+				<div th:replace="fragments/alert :: alert-error">
+					<!-- Div para errors -->
+				</div>
+				
+				<input type="hidden" th:field="*{codigo}"/>
+				
+				<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group" 
+								 th:classappend="${#fields.hasErrors('nome')} ? has-error">
+								<label for="nome">Nome</label>
+								<input id="nome" type="text" class="form-control" th:field="*{nome}"
+									   placeholder="Digite aqui..."/>
+							</div>
+						</div>
+				</div>
+						
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group"
+							 th:classappend="${#fields.hasErrors('cnpj')} ? has-error">
+							<label for="cnpj">CNPJ</label>
+							<input id="cnpj" type="text" class="form-control" th:field="*{cnpj}"
+								   placeholder="Digite o cnpj..." maxlength="18"/>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="tipo">Status do fornecedor</label>
+							<select id="tipo" class="form-control chosen" th:field="*{cod_status}">
+								<option th:each="status : ${Status}" th:value="${status}" 
+										th:text="#{|tipoStatus.${status}|}"></option>
+							</select>
+						</div>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<button class="btn  btn-primary" type="submit">Salvar</button>
+					<a th:href="@{/fornecedor}" class="btn btn-default">Cancelar</a>
+				</div>
+		
+			</form>
+		</div>
+	</section>
+	
+	<th:block layout:fragment="javascript-extra">
+	
+			<script th:src="@{/javascripts/venders/jquery.mask.min.js}"></script>
+			
+			<script type="text/javascript">
+				
+				$(function () {
+	        		$('#cnpj').mask('00.000.000/0000-00');
+	        		
+	            });
+				
+				$('#cnpj').on('keypress', function(event){
+					
+					if(event.which >= 48 && event.which <= 57)
+							return true
+					
+					return false
+					
+				})
+				
+			</script>		
+						
+	</th:block>
+	
+	
+</body>
+</html>

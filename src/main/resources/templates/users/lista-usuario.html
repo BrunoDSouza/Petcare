@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:data="http://www.thymeleaf.org/extras/data-attribute"
+	layout:decorate="~{layout/layout-padrao}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body>
+	<section layout:fragment="conteudo">
+		<div class="page-header">
+			<div class="row">
+				<div class="container-fluid">
+					<div class="col-xs-10">
+						<h1>Usuários Cadastrados</h1>
+					</div>
+				
+					<div class="col-xs-2" sec:authorize="hasRole('ADMIN')">
+						<div class="aw-page-header-controls">
+							<a class="btn btn-primary" th:href="@{/users/novo}">
+								<i class="fa  fa-plus-circle"></i> <span class="hidden-xs">Novo Usuário</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+			
+		<div class="container-fluid">
+			
+			<div th:replace="fragments/alert :: alert">
+				<!-- Div para mensagens -->
+			</div>
+		
+			<div class="row">
+				<div class="col-sm-4 col-sm-12" th:each="user : ${users}">
+			        <div class="thumbnail box-thumb box-fix ">
+						<div class="caption text-left">
+							<img th:src="@{/images/icon-user-all.png}"class="aw-logged-user__picture" />
+				 			<h1 th:text="'Usuário: ' + ${user.username}"></h1>
+				            <p th:text="'Email: ' + ${user.email}"></p>
+							<p th:text="'Data Nascimento: ' + ${#dates.format(user.dtNascimento, 'dd/MM/yyyy')}"></p>			                  
+				            <p>Grupos:
+				            <span th:each="role : ${user.roles}">
+				            	| <span th:text="#{|tipoRole.${role.descricao}|}"></span>
+				            </span>
+				            </p>
+				            <p th:text="'Situação: ' + #{|tipoStatus.${user.status}|}"></p>
+				            
+				          	<a class="btn btn-primary" th:href="@{/users/{codigo}(codigo=${user.codigo})}" role="button"
+				          	   sec:authorize="hasRole('ADMIN')">
+					          	<span class="glyphicon glyphicon-edit"></span>
+					          	Editar
+				          	</a>
+				          	<a class="btn btn-danger" role="button"
+				          	   sec:authorize="hasRole('ADMIN')"
+				          	   data-toggle="modal" data-target="#confirmExclude"
+				          	   data:nome="${user.username}"
+							   data:url-delete="@{/users/{codigo}(codigo=${user.codigo})}">
+				          	   <span class="glyphicon glyphicon-trash"></span>
+				          	   Excluir
+				          	</a>
+			          </div>       
+			        </div>
+				</div>
+			</div>
+		</div>
+		
+		<div th:fragment="modalExclude">
+			<div class="modal fade" id="confirmExclude" tabindex="-1" role="dialog">
+				<div class="modal-dialog" role="document">
+			  		<div class="modal-content">
+			  			<form th:action="@{/produto}" method="POST">
+			  				<input type="hidden" name="_method" value="DELETE"/>
+			     			<div class="modal-header">
+				       			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				       				<span aria-hidden="true">&times;</span>
+				       			</button>
+				       			<h2 class="modal-title" id="myModalLabel">Excluir Usuário</h2>
+			     			</div>
+			     			<div class="modal-body">
+			       				<span>Conteudo dinamico</span>
+			     			</div>
+			     			<div class="modal-footer">
+			       				<button type="button" class="btn  btn-default" data-dismiss="modal">Cancelar</button>
+			       				<button type="submit" class="btn  btn-danger">Excluir</button>
+			     			</div>
+			     		</form>
+			  		</div>
+				</div>
+			</div>
+		</div>
+		
+		
+	</section>
+	
+	<th:block layout:fragment="javascript-extra">
+		<script th:src="@{/javascripts/excluir-modal.js}"></script>
+		<script th:src="@{/javascripts/utils.js}"></script>				
+		<script type="text/javascript">
+			
+			$('#confirmExclude').on('show.bs.modal', function (event) {
+				var botao = $(event.relatedTarget);
+				modalExclude($(this), botao)
+			});
+
+			uniformHeight($(".thumbnail"))
+			
+		</script>
+				
+				
+				
+	</th:block>
+</body>
+</html>

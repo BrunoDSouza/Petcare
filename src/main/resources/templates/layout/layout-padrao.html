@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	
+<head>
+	<meta charset="UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<link rel="shortcut icon" type="image/x-icon" th:href="@{/layout/images/favicon.png}">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400, 100, 300, 500, 700" rel="stylesheet"/> 
+	<title>PetCare</title>
+	
+	
+	<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/vendors.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/algaworks.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/application.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/layout/vendors/datatables/css/jquery.dataTables.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/layout/vendors/font-awesome/css/font-awesome.min.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/layout/vendors/chosen/chosen.min.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/stylesheets/stylesheetsPetcare.css}"/>
+
+</head>
+
+<body>
+<div class="aw-layout-page">
+
+	<nav class="navbar  navbar-fixed-top  navbar-default  js-sticky-reference" id="main-navbar">
+	  <div class="container-fluid">
+
+	    <div class="navbar-header">
+	      <a class="navbar-brand  hidden-xs" th:href="@{/home/}">
+	        <img alt="PetCare" class="logo" th:src="@{/layout/images/logopetcare/petcare-menu.png}" title="Home"/>
+	      </a>
+
+	      <ul class="nav  navbar-nav">
+	        <li>
+	          <a href="#" class="js-sidebar-toggle bar-burger"><i class="fa  fa-bars fa-1x"></i></a>
+	        </li>
+	      </ul>
+	    </div>
+
+	    <ul class="nav navbar-nav  navbar-right">     
+	      <!-- <li>		  
+	      	<p class="navbar-text" th:text="'Usuário: ' + ${#authentication.name}"></p>
+	      </li>	 -->
+	      
+		  <li class="dropdown">
+	        <a href="#" class="dropdown-toggle user-login" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+	          <img th:src="@{/images/icon-user-all.png}"
+	                width="30" height="30" />
+	                
+			  &nbsp;<span class="username hidden-xs" th:text="${#authentication.name}"></span>	                
+			  <span class="caret"></span>	                
+	        </a>
+	        
+	        <ul class="dropdown-menu">
+	          <li><a th:href="@{/users/settings/profile}">
+	          <i class="fa fa-fw fa-user"></i>
+	          Meu perfil</a></li>
+	          <li role="separator" class="divider"></li>
+	          <li><a th:href="@{/logout}">
+	          <em class="fa fa-sign-out"></em>
+	          Sair</a></li>
+	        </ul>
+	      </li>
+	      
+	    </ul>
+
+	  </div>
+	</nav>
+
+	<aside class="aw-layout-sidebar  js-sidebar">
+		<div class="aw-layout-sidebar__content">
+
+		    <nav class="aw-menu js-menu">
+		      <ul class="aw-menu__list">
+
+				<li class="aw-menu__item link-item">
+		          <a th:href="@{/home/}"><i class="fa fa-fw fa-home" aria-hidden="true"></i>Dashboard</a>
+		        </li>
+
+		        <li class="aw-menu__item item-accordion">
+		          <input type="checkbox" id="checkItem">
+		          <label for="checkItem" class="item">
+				  	<i class="fa fa-fw fa-handshake-o" aria-hidden="true"></i>
+		          	&nbsp;Fornecedores
+		          	<i class="aw-menu__navigation-icon fa "></i>	
+		          </label>
+		          
+		          <ul class="aw-menu__list">
+		          	<li sec:authorize="hasAnyRole('ROLE_FUNC','ADMIN')">
+		          		<a th:href="@{/fornecedor}"> 
+			          		<i class="fa fa-fw fa-american-sign-language-interpreting" aria-hidden="true"></i>
+			          		&nbsp;Seus fornecedores
+		          		</a>	
+		          	</li>
+		          </ul>
+		        </li>
+
+		        <li class="aw-menu__item item-accordion">
+		          <input type="checkbox" id="checkItem2">
+		          <label for="checkItem2" class="item">
+				  	<i class="fa fa-fw fa-codepen" aria-hidden="true"></i>
+		          	&nbsp;Produtos
+		          	<i class="aw-menu__navigation-icon fa"></i>	
+		          </label>
+		          
+		          <ul class="aw-menu__list">
+		          	<li sec:authorize="hasRole('ROLE_ADMIN')">
+		          		<a th:href="@{/produto/novo}">
+		          		<i class="fa fa-fw fa-plus-circle" aria-hidden="true"></i>
+		          		Novo Produto
+		          		</a>	
+		          	</li>
+		          	<li sec:authorize="hasAnyRole('ROLE_FUNC','ADMIN')">
+		          		<a th:href="@{/tipos}">
+		          		<i class="fa fa-fw fa-product-hunt" aria-hidden="true">
+		          		</i>
+		          		Tipos de produtos
+		          		</a>	
+		          	</li>
+		          	<li sec:authorize="hasAnyRole('ROLE_FUNC','ADMIN')">
+		          		<a th:href="@{/produto}">
+		          		<i class="fa fa-fw fa-dropbox" aria-hidden="true">
+		          		</i>
+		          		Seus produtos
+		          		</a>	
+		          	</li>
+		          </ul>
+		        </li> 
+
+		        <li class="aw-menu__item item-accordion" sec:authorize="hasAnyRole('ROLE_FUNC','ADMIN')">
+		          <input type="checkbox" id="checkItem3">
+		          <label for="checkItem3" class="item">
+				  	<i class="fa fa-fw fa-exchange"aria-hidden="true"></i>
+		          	&nbsp;Movimentações
+		          	<i class="aw-menu__navigation-icon fa"></i>	
+		          </label>
+		          
+		          <ul class="aw-menu__list">
+		          	<li>
+		          		<a th:href="@{/movimentacao/novo}">
+		          		<i class="fa fa-fw fa-arrow-down" aria-hidden="true">
+		          		</i>
+		          		Nova Movimentação
+		          		</a>	
+		          	</li>
+		          	<li>
+		          		<a th:href="@{/movimentacao}">
+		          		<i class="fa fa-fw fa-cart-arrow-down" aria-hidden="true">
+		          		</i>
+		          		Registros Mov.
+		          		</a>	
+		          	</li>
+		          </ul>
+		        </li> 	
+
+
+		        <li class="aw-menu__item item-accordion" sec:authorize="hasRole('ROLE_ADMIN')">
+		          <input type="checkbox" id="checkItem4">
+		          <label for="checkItem4" class="item">
+				  	<i class="fa fa-fw fa-address-card" aria-hidden="true"></i>
+		          	&nbsp;Setores
+		          	<i class="aw-menu__navigation-icon fa"></i>	
+		          </label>
+		          
+		          <ul class="aw-menu__list">
+		          	<li>
+			          	<a th:href="@{/setor}">
+		          			<i class="fa fa-fw fa-address-card" aria-hidden="true"></i>
+		          			&nbsp;Seus Setores
+			          	</a>
+		          	</li>
+		          </ul>
+		        </li>
+		        
+		        <li class="aw-menu__item item-accordion" sec:authorize="hasRole('ROLE_ADMIN')">
+		          <input type="checkbox" id="checkItem5">
+		          <label for="checkItem5" class="item">
+				  	<i class="fa fa-fw fa fa-user-circle" aria-hidden="true"></i>
+		          	&nbsp;Usuários
+		          	<i class="aw-menu__navigation-icon fa"></i>	
+		          </label>
+		          
+		          <ul class="aw-menu__list">
+		          	<li>
+		          		<a th:href="@{/users/novo}">
+		          			<i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
+		          			&nbsp;Novo Usuário
+		          		</a>	
+		          	</li>
+		          	<li>
+		          		<a th:href="@{/users}">
+		          			<i class="fa fa-fw fa-users" aria-hidden="true"></i>
+		          			Usuários Cadastrados
+		          		</a>	
+		          	</li>
+		          </ul>
+		        </li>
+		                                      
+		        <li class="aw-menu__item link-item">
+		          <a th:href="@{/logout}">
+			          <i class="fa fa-fw fa-sign-out" aria-hidden="true"></i>
+			          Sair
+		          </a>
+		        </li>
+		        
+			
+		      </ul>
+		    </nav>
+
+		</div>
+	</aside>
+
+	<section class="aw-layout-content  js-content" layout:fragment="conteudo">	</section>
+	
+	<div class="loading">
+    	<i class="fa fa-spinner fa-spin fa-5x" aria-hidden="true"></i>
+	</div>
+	
+	<footer class="aw-layout-footer  js-content">
+		<div class="container-fluid">
+			<label class="aw-footer-disclaimer">&copy; 2017 Petcare. Todos os direitos reservados.</label>
+		</div>
+	</footer>
+
+</div>
+
+
+<script th:src="@{/layout/javascripts/vendors.min.js}"></script>
+<script th:src="@{/layout/javascripts/algaworks.min.js}"></script>
+<script th:src="@{/javascripts/venders/jquery.masknumber.min.js}"></script>
+<script th:src="@{/layout/vendors/chosen/chosen.jquery.min.js}"></script>
+<script th:src="@{/javascripts/venders/jquery.dataTables.min.js}"></script>
+<script th:src="@{/javascripts/pesquisa-table.js}"></script>
+
+
+<script>
+	
+	$('[data-tooltip="tooltip"]').tooltip();
+
+	$('.js-money').maskNumber({
+			decimal: ',',
+			thousands: '.'
+	});
+	
+	$('.only-number').maskNumber({
+		decimal: '',
+		thousands: ''
+	});
+	
+	$('.chosen').chosen({
+		no_results_text: "Nenhum item encontrado!",
+		allow_single_deselect: true,
+		max_selected_options: 1,
+		width: '100%'
+	 });
+
+	
+	
+	$(document).on('ready',function(){
+		$('.alert-success, .alert-danger').fadeOut(8000)
+		$(".loading").hide();
+	});
+	
+ 	$(document).ajaxStart(function() {
+		  $( ".loading" ).show();
+	});
+	
+	$(document).ajaxStop(function() {
+		$( ".loading" ).hide();
+    }) 
+	
+	//Evento atrelado ao clique dos items no menu lateral
+	$('.item').on('click', function(){
+		
+		var indexCurrent = $('.item').index(this)		
+
+		var checked = $('input[type=checkbox]:checked')
+		var indexPrevious = $('input[type=checkbox]').index(checked);
+		
+		if (indexPrevious == -1 || indexPrevious == null || indexPrevious == undefined){
+			indexPrevious = indexCurrent;
+		}
+
+		if (indexCurrent == indexPrevious) {
+				changeCaret([indexCurrent]);					
+				return
+		}
+
+		$('input[type=checkbox]').eq(indexPrevious)
+								 .attr('checked',false)
+		
+		changeCaret([indexPrevious, indexCurrent]);
+		
+	});
+
+
+	var changeCaret = function (data){
+		
+		$.each(data, function(key, val){
+			$('.aw-menu__navigation-icon').eq(val)
+									  	  .toggleClass("fa-caret-down");										  	  
+		})
+			
+	}
+
+
+</script>
+
+<th:block layout:fragment="javascript-extra"></th:block>
+
+</body>
+</html>

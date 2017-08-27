@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="~{layout/layout-simples}">
+
+<th:block layout:fragment="conteudo">
+	<form th:action="@{/}" method="POST">
+		<div class="aw-simple-panel">
+			
+			<ul class="cb-slideshow">
+	            <li><span>Image 01</span><div></div></li>
+	            <li><span>Image 02</span><div></div></li>
+	            <li><span>Image 03</span><div></div></li>
+	            <li><span>Image 04</span><div></div></li>
+	            <li><span>Image 05</span><div></div></li>
+	            <li><span>Image 06</span><div></div></li>
+    		</ul>
+			<div class="content-login">
+				<div class="row">
+					<div class="col-sm-12">
+						<img title="Petcare" class="logo-login" th:src="@{/layout/images/logopetcare/logo-petcare.png}"/>	
+					</div>
+				</div>
+			
+				
+				<div class="aw-simple-panel__box">
+					
+					<div class="aw-simple-panel__message message" th:if=" not ${param.logout}">
+						Por favor, faça o login.
+					</div>
+					<div class="aw-simple-panel__message is-error" th:if="${#bools.isTrue(param.error)}">
+						O usuário e/ou senha não conferem
+					</div>
+					
+                    <div class="alert alert-info" th:if="${param.logout}">
+                        Você encerrou sua sessão com sucesso!
+                    </div>
+				
+					<div class="form-group  has-feedback">
+						<input type="text" class="form-control  input-lg" placeholder="Usuário ou Email" 
+							autofocus="autofocus" name="username"/>
+						<span class="glyphicon  glyphicon-envelope  form-control-feedback"></span>
+					</div>
+					
+					<div class="form-group  has-feedback">
+						<input type="password" class="form-control  input-lg" placeholder="Digite sua senha" name="password"/>
+						<span class="glyphicon  glyphicon-lock  form-control-feedback" ></span>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn  btn-primary  btn-lg  aw-btn-full-width">Entrar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</th:block>
+
+</html>

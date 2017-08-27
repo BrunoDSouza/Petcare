@@ -1,0 +1,22 @@
+/* CSS reset */
+ol,ul {
+	list-style:none;
+}
+caption,th {
+	text-align:left;
+}
+
+/* General Demo Style */
+body{
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+.content-login{
+	position: relative;
+	text-align: center;
+	display: block;
+}
+.clr{
+	clear: both;
+}

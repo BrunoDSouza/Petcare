@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:data="http://www.thymeleaf.org/extras/data-attribute"
+	layout:decorate="~{layout/layout-padrao}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body>
+	<section layout:fragment="conteudo">
+		<div class="page-header">
+			<div class="row">
+				<div class="container-fluid">
+					<div class="col-xs-10">
+						<h1>Lista de Fornecedores</h1>
+					</div>
+				
+					<div class="col-xs-2" sec:authorize="hasRole('ADMIN')">
+						<div class="aw-page-header-controls">
+							<a class="btn btn-primary" 
+							   data-toggle="modal" data-target="#modalFornecedor"
+							   data:url-edit="@{/ajax/novo/fornecedor}">
+								<i class="fa  fa-plus-circle"></i> <span class="hidden-xs">Novo Fornecedor</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="container-fluid">
+		
+			<div th:replace="fragments/alert :: alert">
+					<!-- Div para mensagens -->
+			</div>
+			
+			
+			<form class="container-fluid" th:object="${fornecedor}">
+			 	<div th:replace="fragments/alert :: alert-error">
+					<!-- Div para errors -->
+				</div>
+			</form>	
+			
+			<div class="row">
+			<div class="col-sm-4 col-sm-12" th:each="f : ${fornecedores}">
+		        <div class="thumbnail box-thumb box-fix">
+					<div class="caption text-left">
+			 			<h1 th:text="${f.nome}"></h1>
+			 			<h5 th:text="'Nº de serie ' + ${f.codigo}"></h5>
+			            <p th:text="'CNPJ - ' + ${f.cnpj}"></p>
+			            <p th:text="'Situação: ' + #{|tipoStatus.${f.cod_status}|}"></p>
+		          </div>  
+		          <div class="caption text-left">
+		          		<a class="btn btn-primary"
+			          	   sec:authorize="hasRole('ADMIN')"
+			          	   data-toggle="modal" data-target="#modalFornecedor"
+					  	   data:url-edit="@{/ajax/edit/fornecedor/{codigo}(codigo=${f.codigo})}">
+					  	   Editar
+						</a>	
+		          </div>     
+		        </div>
+			</div>
+			</div>
+			
+		</div>
+		
+		<!-- Inicio do Modal Fornecedor -->
+		<div class="modal fade" id="modalFornecedor" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-md" role="document">
+		  		<div class="modal-content">
+		  			<div id="container-fornecedor">
+		  			<div th:fragment="modalFornecedor">
+		  					<form method="POST" class="form-vertical js-form-loading" th:object="${fornecedor}" 
+								  th:action="@{/fornecedor/novo}">
+				     			<div class="modal-header">
+					       			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					       				<span aria-hidden="true">&times;</span>
+					       			</button>
+					       			<h2 class="modal-title" id="myModalLabel">Adicione um novo Fornecedor</h2>
+				     			</div>
+				     			<div class="modal-body">		       					
+									<input type="hidden" th:field="*{codigo}"/>
+				
+									<div class="row">
+											<div class="col-sm-12">
+												<div class="form-group" 
+													 th:classappend="${#fields.hasErrors('nome')} ? has-error">
+													<label for="nome">Nome</label>
+													<input id="nome" type="text" class="form-control" th:field="*{nome}"
+														   placeholder="Digite aqui..."/>
+												</div>
+											</div>
+									</div>
+											
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="form-group"
+												 th:classappend="${#fields.hasErrors('cnpj')} ? has-error">
+												<label for="cnpj">CNPJ</label>
+												<input id="cnpj" type="text" class="form-control" th:field="*{cnpj}"
+													   placeholder="Digite o cnpj..." maxlength="18"/>
+											</div>
+										</div>
+									</div>
+									
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="form-group">
+												<label for="tipo">Status do fornecedor</label>
+												<select id="tipo" class="form-control chosen" th:field="*{cod_status}">
+													<option th:each="status : ${Status}" th:value="${status}" 
+															th:text="#{|tipoStatus.${status}|}"></option>
+												</select>
+											</div>
+										</div>
+									</div>
+									
+									<div class="form-group">
+										<button class="btn  btn-primary" type="submit">Salvar</button>
+										<a data-dismiss="modal" class="btn btn-default">Cancelar</a>
+									</div>
+				     			</div>
+				     		</form>
+		  			</div>
+		  			</div>
+		  		</div>
+			</div>
+		</div> <!-- Fim do modal Fornecedor -->
+		
+	</section>
+	
+	<th:block layout:fragment="javascript-extra">
+		<script th:src="@{/javascripts/venders/jquery.mask.min.js}"></script>
+		<script th:src="@{/javascripts/utils.js}"></script>
+		<script type="text/javascript">
+		
+			dataTable.create($('.dataTable'));
+			
+			$('#search').on('keyup change', function(){
+				dataTable.search($(this))
+			});
+			
+			$(document).on('show.bs.modal','#modalFornecedor', function(event){
+				var botao = $(event.relatedTarget);
+				getModal(botao,$('#container-fornecedor'))
+			});
+			
+			uniformHeight($(".thumbnail"))
+			
+			$(function () {
+	        		$('#cnpj').mask('00.000.000/0000-00');
+	        		
+            });
+			
+			$('#cnpj').on('keypress', function(event){
+				
+				if(event.which >= 48 && event.which <= 57)
+						return true
+				
+				return false
+				
+			})
+			
+		</script>
+				
+	</th:block>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:data="http://www.thymeleaf.org/extras/data-attribute"
+	layout:decorate="~{layout/layout-padrao}">
+
+<head>
+</head>
+	
+<body>
+	<section layout:fragment="conteudo">
+	<div class="page-header">
+		  <div class="container-fluid">
+		    <h1>
+		      Pagina Inicial
+		    </h1>
+		  </div>
+	</div>
+		
+		<div class="container-fluid">
+		  
+		  <div th:replace="fragments/alert :: alert">
+					<!-- Div para mensagens -->
+		  </div>
+		  
+		  <div class="row">
+		    <div class="col-sm-4">
+		    
+		      <div class="aw-box">
+		        <div class="aw-box__icon">
+		          <i class="fa  fa-bank  fa-3x"></i>
+		        </div>
+				<div class="aw-box__value">
+		        	<span th:text="'R$' + ${#numbers.formatDecimal(FaturamentoTotal,0,'POINT',2,'COMMA')}"></span>
+		        </div>
+		        <div class="aw-box__title">Faturamento total</div>
+		      </div>
+		    
+		    </div>
+		
+		    <div class="col-sm-4">
+		    
+		      <div class="aw-box">
+		        <div class="aw-box__icon">
+		          <i class="fa  fa-usd  fa-3x"></i>
+		        </div>
+				<div class="aw-box__value">
+		        	<span th:text="'R$' + ${#numbers.formatDecimal(FaturamentoAno,0,'POINT',2,'COMMA')}"></span>
+		        </div>
+		        <div class="aw-box__title">Faturamento no ano</div>
+		      </div>
+		    
+		    </div>
+		    
+		    <div class="col-sm-4">
+		    
+		      <div class="aw-box">
+		        <div class="aw-box__icon">
+		          <i class="fa  fa-heartbeat  fa-3x"></i>
+		        </div>
+		        <div class="aw-box__value">
+		        	<span th:text="'R$' + ${#numbers.formatDecimal(FaturamentoMes,0,'POINT',2,'COMMA')}"></span>
+		        </div>
+		        <div class="aw-box__title">Faturamento no mês</div>
+		      </div>
+		    
+		    </div>
+		  </div>
+		
+		  <div class="row">
+		  	
+			<div class="col-sm-4">
+		    
+		      <div class="aw-box">
+		        <div class="aw-box__icon">
+		          <i class="fa fa-eur fa-3x"></i>
+		        </div>
+		        <div class="aw-box__value">
+		        	<span th:text="'R$' + ${#numbers.formatDecimal(FaturaLiquidaAno,0,'POINT',2,'COMMA')}"></span> 
+		        </div>
+		        <div class="aw-box__title">Faturamento líquido anual</div>
+		      </div>
+		    
+		    </div>
+		  	
+		  	<div class="col-sm-4">
+		    
+		      <div class="aw-box">
+		        <div class="aw-box__icon">
+		          <i class="fa fa-money fa-3x"></i>
+		        </div>
+		        <div class="aw-box__value">
+		        	<span th:text="'R$' + ${#numbers.formatDecimal(FaturaLiquidaMes,0,'POINT',2,'COMMA')}"></span>
+		        </div>
+		        <div class="aw-box__title">Faturamento líquido mensal</div>
+		      </div>
+		    
+		    </div>
+		    		    
+		    <div class="col-sm-4">
+		    
+		      <div class="aw-box">
+		        <div class="aw-box__icon">
+		          <i class="fa fa-sort-amount-desc fa-3x"></i>
+		        </div>
+		        <div class="aw-box__value">
+		        	<span th:text="'R$' + ${#numbers.formatDecimal(FaturaDesperdicio,0,'POINT',2,'COMMA')}"></span>
+		        </div>
+		        <div class="aw-box__title">Custos e disperdicios mensais</div>
+		      </div>
+		    
+		    </div>
+		  </div>
+		
+		  <div class="row">
+		    <div class="col-sm-4">
+		    
+		      <div id="forncedorAll" class="aw-box click">
+		        <div class="aw-box__icon">
+		          <i class="fa  fa-handshake-o  fa-3x"></i>
+		        </div>
+		        <div class="aw-box__value">
+		        	<span th:text="${FornecedoresTotal}"></span>
+		        </div>
+		        <div class="aw-box__title">Total de Fornecedores</div>
+		      </div>
+		    
+		    </div>
+		    
+		    <div class="col-sm-4">
+		    
+		      <div id="produtoOff" class="aw-box click">
+		        <div class="aw-box__icon">
+		          <i class="fa fa-battery-quarter fa-3x"></i>
+		        </div>
+		        <div class="aw-box__value">
+					<span th:text="${EstoqueOff}"></span> 
+				</div>
+		        <div class="aw-box__title">Produtos abaixo da média</div>
+		      </div>
+		    
+		    </div>
+		    
+		    <div class="col-sm-4">
+		    
+		      <div id="produtoAll" class="aw-box click">
+		        <div class="aw-box__icon">
+		          <i class="fa  fa-truck  fa-3x"></i>
+		        </div>
+		        <div class="aw-box__value">
+		        	<span th:text="${TotalEstoque}"></span> 
+		        </div>
+		        <div class="aw-box__title">Estoque total de produtos</div>
+		      </div>
+		    
+		    </div>
+		  </div>
+		
+		  <div class="row">
+		    <div class="col-sm-6">
+		      <div class="aw-graph-box">
+		        <div class="aw-graph-box__header">
+		          <h2 class="aw-graph-box__title"> Baixa de consumo por Produto <small>últimos 12 meses</small></h2>
+		        </div>
+		        <div id="produtosChartSaida">
+		        	<!-- Charts para Produtos -->
+		        </div>
+		      </div>
+		    </div>
+		    
+		    <div class="col-sm-6">
+		      <div class="aw-graph-box">
+		        <div class="aw-graph-box__header">
+		          <h2 class="aw-graph-box__title"> Baixa de entrada por Produto <small>últimos 12 meses</small></h2>
+		        </div>
+		        <div id="produtosChartEntrada">
+		        	<!-- Charts para Produtos -->
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		  
+		  <div class="row"> 
+		  	<div class="col-sm-12">
+		      <div class="aw-graph-box">
+		        <div class="aw-graph-box__header">
+		          <h2 class="aw-graph-box__title">Faturamento por mês <small>últimos 12 meses</small></h2>
+		        </div>
+		        <div class="aw-graph-box__content" style="position: relative">
+		          <div id="faturamentoChart">
+		        	<!-- Charts para Faturamento -->
+		          </div>
+		        </div>
+		      </div>
+		  	</div>
+		  </div>
+		  
+		  <div class="row">
+		  	<div class="col-sm-12">
+		      <div class="aw-graph-box">
+		        <div class="aw-graph-box__header">
+		          <h2 class="aw-graph-box__title">Faturamento por fornecedor <small>últimos 12 meses</small></h2>
+		        </div>
+		        <div class="aw-graph-box__content" style="position: relative">
+		          <div id="fornecedorChart">
+		        	<!-- Charts para Fornecedores -->
+		        </div>
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		  
+
+		<!-- Modal Produto sem estoque -->
+		<div class="modal fade" id="modalProdutoOff" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-lg" role="document">
+		  		<div class="modal-content">
+		  			<form th:action="@{/produto}">
+		     			<div class="modal-header">
+			       			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			       				<span aria-hidden="true">&times;</span>
+			       			</button>
+			       			<h2 class="modal-title" id="myModalLabel">Produtos com estoque abaixo da média</h2>
+		     			</div>
+		     			<div class="modal-body">
+		     				
+		     				<div th:replace="fragments/table-produto :: form-pesquisa">
+									<!-- Form de pesquisa -->
+							</div>
+		     			
+		     				<div id="ProdutosListOff">
+		     					<div th:fragment="ListProdutosOff">
+			     					<div th:insert="fragments/table-produto :: table">
+										<!-- Tabela de Produtos -->
+									</div>
+		     					</div>
+		     				</div>
+		     				 
+		     			</div>
+		     				
+		     		</form>
+		  		</div>
+			</div>
+		</div> <!-- Fim Modal Produto sem estoque-->
+
+		  
+		</div>			
+	
+	</section>
+	
+	<th:block layout:fragment="javascript-extra">
+		<script th:src="@{/javascripts/venders/jquery.dataTables.min.js}"></script>
+		<script th:src="@{/javascripts/produto-modal.js}"></script>
+		<script th:src="@{/javascripts/pesquisa-table.js}"></script>
+		<script th:src="@{/javascripts/venders/highcharts.min.js}"></script>
+		<script th:src="@{/javascripts/venders/exporting.min.js}"></script>
+		<script th:src="@{/javascripts/chartProduto.js}"></script>
+		<script th:src="@{/javascripts/chartFaturamento.js}"></script>
+		<script th:src="@{/javascripts/chartFornecedor.js}"></script>
+		
+		
+		<script type="text/javascript">
+		
+			$(document).on('ready', function(){
+				chartProduto.create($('#produtosChartSaida').get(0),'saida')
+				chartProduto.create($('#produtosChartEntrada').get(0),'entrada')
+				chartFaturamento.create($('#faturamentoChart').get(0))
+				chartFornecedor.create($('#fornecedorChart').get(0))
+			});
+
+			$('#produtoOff').on('click', function(){
+				$('#modalProdutoOff').modal('toggle');
+			})
+			
+			$('#produtoAll').on('click', function(){
+				window.location.href="/produto"
+			})
+			
+			$('#forncedorAll').on('click', function(){
+				window.location.href="/fornecedor"
+			})
+		
+			$(document).on('show.bs.modal','#modalProdutoOff', function(){
+				
+				findOffProdutos($('#ProdutosListOff'));	
+			});
+			
+			
+			$('#search').on('keyup change', function(){
+				dataTable.search($(this))
+			});
+			
+			$('#tipo').on('change', function(){
+				dataTable.change($(this),2)
+			});
+			
+			$('#fornecedor').on('change', function(){
+				dataTable.change($(this),3)
+			});
+			
+			$('#medida').on('change', function(){
+				dataTable.change($(this),4)
+			});
+			
+			
+		</script>
+						
+	</th:block>
+
+</body>
+</html>
