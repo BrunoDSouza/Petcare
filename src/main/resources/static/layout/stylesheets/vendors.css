@@ -3586,7 +3586,7 @@ a.bg-danger:focus {
 }
 .page-header {
   padding-bottom: 8px;
-  margin: 36px 0 18px;
+  margin: 55px 0 18px;
   border-bottom: 1px solid #eeeeee;
 }
 ul,
@@ -8851,6 +8851,13 @@ button.close {
     display: none !important;
   }
 }
+
+@media (max-width: 350px) {
+  .hidden-xs-min {
+    display: none !important;
+  }
+}
+
 @media (min-width: 768px) and (max-width: 991px) {
   .hidden-sm {
     display: none !important;

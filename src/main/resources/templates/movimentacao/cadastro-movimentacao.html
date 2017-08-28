@@ -211,16 +211,16 @@
 									<table class="table dataTable table-striped  table-bordered  table-hover  table-condensed  js-sticky-table">
 										<thead class="aw-table-header-solid">
 											<tr>
-												<th >Nome</th>
-												<th class="av-table-col-2">Tipo Produto</th>
-												<th class="av-table-col-2" >Fornecedor</th>
-												<th class="av-table-col-2">Medida</th>
-												<th class="av-table-col-2">Valor Compra</th>
-												<th class="av-table-col-2">Valor Venda</th>
-												<th class="av-table-col-2">Saldo Estoque</th>
-												<th class="av-table-col-2">Estoque Minimo</th>
-												<th class="av-table-col-2">Status</th>
-												<th class="av-table-col-1"></th>
+												<th>Nome</th>
+												<th>Tipo Produto</th>
+												<th>Fornecedor</th>
+												<th>Medida</th>
+												<th>Valor Compra</th>
+												<th>Valor Venda</th>
+												<th>Saldo Estoque</th>
+												<th>Estoque Minimo</th>
+												<th>Status</th>
+												<th></th>
 												<!-- sec:authorize="hasRole('ROLE_CADASTRAR_VINHO')"></th> --> 
 											</tr>
 										</thead>
@@ -232,8 +232,8 @@
 												<td th:text="${p.tipoproduto.tipo}"></td>
 												<td th:text="${p.fornecedor.nome}"></td>
 												<td th:text="#{|tipoMedida.${p.medida}|}" class="text-center"></td>
-												<td th:text="${p.vl_compra}"></td>
-												<td th:text="${p.vl_venda}"></td>
+												<td th:text="${#numbers.formatDecimal(p.vl_compra,0,'POINT',2,'COMMA')}"></td>
+												<td th:text="${#numbers.formatDecimal(p.vl_venda,0,'POINT',2,'COMMA')}"></td>
 												<td th:text="${p.qtd_estoque}"></td>
 												<td th:text="${p.estoque_min}"></td>
 												<td th:text="#{|tipoStatus.${p.status_produto}|}"></td>

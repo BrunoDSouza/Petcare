@@ -43,16 +43,12 @@
 	    </div>
 
 	    <ul class="nav navbar-nav  navbar-right">     
-	      <!-- <li>		  
-	      	<p class="navbar-text" th:text="'Usuário: ' + ${#authentication.name}"></p>
-	      </li>	 -->
-	      
 		  <li class="dropdown">
 	        <a href="#" class="dropdown-toggle user-login" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 	          <img th:src="@{/images/icon-user-all.png}"
 	                width="30" height="30" />
 	                
-			  &nbsp;<span class="username hidden-xs" th:text="${#authentication.name}"></span>	                
+			  &nbsp;<span class="username hidden-xs-min" th:text="${#authentication.name}"></span>	                
 			  <span class="caret"></span>	                
 	        </a>
 	        

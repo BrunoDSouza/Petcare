@@ -46,8 +46,8 @@
 							<td th:text="${p.tipoproduto.tipo}"></td>
 							<td th:text="${p.fornecedor.nome}"></td>
 							<td th:text="#{|tipoMedida.${p.medida}|}" class="text-center"></td>
-							<td th:text="${'R$' + p.vl_compra}"></td>
-							<td th:text="${'R$' + p.vl_venda}"></td>
+							<td th:text="'R$' + ${#numbers.formatDecimal(p.vl_compra,0,'POINT',2,'COMMA')}"></td>
+							<td th:text="'R$' + ${#numbers.formatDecimal(p.vl_venda,0,'POINT',2,'COMMA')}"></td>
 							<td th:text="${p.qtd_estoque}"></td>
 							<td th:text="${p.estoque_min}"></td>
 							<td th:text="#{|tipoStatus.${p.status_produto}|}"></td>
