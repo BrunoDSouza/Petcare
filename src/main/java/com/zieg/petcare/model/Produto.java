@@ -39,18 +39,18 @@ public class Produto {
 	/** @Membros Privados **/
 	
 	@Id
-	@Column(name="idproduto")
+	@Column(name="idproduto", nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
 	
 	@NotNull
-	@JoinColumn(name="cod_tipo")
+	@JoinColumn(name="cod_tipo", nullable = false)
 	@ManyToOne
 	private TipoProduto tipoproduto;
 	
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name="cod_fornecedor")
+	@JoinColumn(name="cod_fornecedor", nullable = false)
 	private Fornecedor fornecedor;
 	
 	@NotBlank
