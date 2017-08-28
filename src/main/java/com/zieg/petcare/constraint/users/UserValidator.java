@@ -82,7 +82,7 @@ public class UserValidator implements ConstraintValidator<UsersConstraint, Users
 		
 		if(calendar.get(Calendar.YEAR) < 1900 || calendar.get(Calendar.YEAR) >= current.get(Calendar.YEAR)){
 			context.disableDefaultConstraintViolation();;
-			context.buildConstraintViolationWithTemplate("O ano da data deve ser menor que 1900 e menor que o ano atual!")
+			context.buildConstraintViolationWithTemplate("O ano da data deve ser maior que 1900 e menor que o ano atual!")
 				   .addPropertyNode("dtNascimento").addConstraintViolation();
 			return false;
 		}
