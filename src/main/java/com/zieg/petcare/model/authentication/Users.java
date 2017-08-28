@@ -71,7 +71,7 @@ public class Users{
 	
 	@NotNull
 	@Column(name="cod_status")
-	private TipoStatus status;
+	private TipoStatus status = TipoStatus.ATIVADO;
 	
 	@NotNull
 	@OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REFRESH, CascadeType.MERGE}, fetch = FetchType.EAGER, orphanRemoval=false)
