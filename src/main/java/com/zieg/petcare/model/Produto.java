@@ -125,7 +125,7 @@ public class Produto {
 		
 		return ((codigo == null) && (nome == null) && (medida == null) &&
 				(vl_compra == null) && (vl_venda == null) && (tipoproduto == null) &&
-				(fornecedor == null) && (status_produto == null));
+				(fornecedor == null));
 	}
 	
 	

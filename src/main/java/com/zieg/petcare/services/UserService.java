@@ -71,6 +71,12 @@ public class UserService implements UserDetailsService{
 		return usersRepository.findAll();
 	}
 	
+	public List<Users> findUsers(){
+		
+		Users user = getUserPrincipal();
+		return usersRepository.findByCodigoNot(user.getCodigo());
+	}
+	
 	public void save(Users user){
 		
 		if(user.getCodigo() == null)

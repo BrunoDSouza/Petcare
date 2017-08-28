@@ -106,7 +106,7 @@ public class Users{
 		
 		return ((codigo == null) && (username == null) &&
 				(dtNascimento == null) && (email == null) &&
-				(senha == null) && (status == null) && (roles == null));
+				(senha == null) && (roles == null));
 		
 	}
 	

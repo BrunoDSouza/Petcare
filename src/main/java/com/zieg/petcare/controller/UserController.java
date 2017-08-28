@@ -70,7 +70,7 @@ public class UserController {
 	public ModelAndView getListUsers(){
 		
 		ModelAndView mv = new ModelAndView("/users/lista-usuario");
-		mv.addObject("users", userService.findAll());
+		mv.addObject("users", userService.findUsers());
 		
 		return mv;
 		
