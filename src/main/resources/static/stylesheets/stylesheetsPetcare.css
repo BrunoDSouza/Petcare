@@ -229,12 +229,15 @@ li:last-child > label {
 
 .loading {
   position: fixed;
-  left: 50%;
-  top: 50%;
+  left: 0%;
+  top: 0%;
   width: 100%;
   height: 100%;
   z-index: 9999999999;
   overflow: visible;
+  background-color: rgba(114, 122, 124, 0.68);
+  padding-left: 46%;
+  padding-top: 12%;
 }
 
 .alert-blur{
