@@ -129,7 +129,7 @@
 							<td th:text="#{|tipoMovimento.${m.tipoMovimentacao}|}"></td>
 							<td th:text="${m.setor.getDescricao()}"></td>
 							<td th:text="${m.qtd_produto}"></td>
-							<td th:text="$R$' + ${#numbers.formatDecimal(m.vl_unitario,0,'POINT',2,'COMMA')}"></td>
+							<td th:text="'R$' + ${#numbers.formatDecimal(m.vl_unitario,0,'POINT',2,'COMMA')}"></td>
 							<td th:text="${#dates.format(m.dtMovimentacao, 'dd/MM/yyyy')}"></td>
 							<td th:text="${m.usuario}"></td>
 						</tr>
