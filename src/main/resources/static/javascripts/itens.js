@@ -62,7 +62,7 @@ var item = {
 			if (verify[i].val() == "" || parseInt(verify[i].val()) == 0 || verify[i] == null){
 
 				$('.error').eq(i)
-						   .html("Compo obrigatório!")
+						   .html("Campo obrigatório!")
 						   .fadeIn(0200)
 						   .fadeOut(4000)
 
