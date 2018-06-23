@@ -37,10 +37,6 @@ java -jar target/petcare-0.0.1-SNAPSHOT.jar
 mvn spring-boot:run
 
 ```
-# clone repository
-
-# install dependencies
-mvn spring-boot:run
 
 ```
 [See live demo](https://petcare-zg.herokuapp.com)
