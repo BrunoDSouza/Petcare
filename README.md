@@ -4,8 +4,9 @@ Projeto para controle de estoque de clinicas!
 ## Technologies and tools:
 
 - Thymeleaf
+- Bootstrap
 - Spring Boot
-- Spring Data
+- Spring Data JPA
 - Spring Security
 - Maven
 - PostgreSQL
@@ -38,6 +39,5 @@ mvn spring-boot:run
 
 ```
 
-```
 [See live demo](https://petcare-zg.herokuapp.com)
 
