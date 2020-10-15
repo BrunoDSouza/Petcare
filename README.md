@@ -41,3 +41,9 @@ mvn spring-boot:run
 
 [See live demo](https://petcare-zg.herokuapp.com)
 
+##Users
+User basic: alucard
+Password: alucard
+
+User Admin: admin
+Password: admin1234
